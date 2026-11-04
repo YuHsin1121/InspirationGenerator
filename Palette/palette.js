@@ -1,3 +1,4 @@
+'use strict';
 const STYLES = ['柔和 Pastel','復古 Vintage','鮮豔 Vivid','暗色 Dark','清冷 Cool','自然 Earthy','夕陽 Sunset','海洋 Ocean','夏日 Summer','寶石 Jewel','賽博龐克 Cyberpunk','糖果 Candy'];
 const SCHEMES = ['單色 Monochromatic','類似色 Analogous','互補色 Complementary','分裂互補色 Split Complementary'];
 const ROLES = ['淺色','主色','輔色','點綴色','深色'];
@@ -137,3 +138,25 @@ function makePalette(style,scheme){
  const colors=matching.reduce((best,c)=>paletteScore(c)>paletteScore(best)?c:best);
  return {style,scheme,colors};
 }
+
+// 提供其他頁面共用色盤產生功能
+window.PaletteEngine = Object.freeze({
+    STYLES,
+    SCHEMES,
+    ROLES,
+    makePalette,
+
+    // 完全隨機 RGB，不使用 OKLCH 配色規則
+    makeRandomPalette() {
+        return {
+            style: '完全隨機',
+            scheme: 'Random RGB',
+            colors: Array.from({ length: 5 }, () =>
+                '#' + Math.floor(Math.random() * 0x1000000)
+                    .toString(16)
+                    .padStart(6, '0')
+                    .toUpperCase()
+            )
+        };
+    }
+});
