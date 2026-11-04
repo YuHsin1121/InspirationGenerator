@@ -1,18 +1,168 @@
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>👗 服裝亂配部｜Jellyfish Lab</title>
-<link rel="stylesheet" href="../CSS/common.css">
-<link rel="stylesheet" href="../CSS/outfit.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>👗 服裝亂配部｜Jellyfish Lab</title>
+    <link rel="stylesheet" href="../CSS/common.css">
+    <link rel="stylesheet" href="../CSS/outfit.css">
 </head>
+
 <body data-page="outfit">
-<main class="tool-page">
-    <h1>👗 服裝亂配部</h1>
-    <p>幫角色搭配各種奇妙服裝</p>
-    <p class="coming-soon">籌備中，水母還在研究怎麼亂搞 ww</p>
-</main>
-<script src="../Shared/outfit-data.js"></script>
-<script src="./app.js"></script>
-<script src="../Shared/layout.js"></script>
+    <main class="outfit-page">
+        <header class="page-heading">
+            <h1>👗 服裝亂配部</h1>
+            <p>今天要讓誰穿得漂漂亮亮（還是亂七八糟）？</p>
+        </header>
+
+
+        <section class="panel settings-panel" aria-label="服裝生成設定">
+
+            <!-- 搭配模式 -->
+            <div class="setting-row">
+                <span class="setting-label">搭配模式</span>
+
+                <div class="setting-content mode-controls">
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="outfitMode" value="set" checked>
+                            套裝模式
+                        </label>
+                        <label>
+                            <input type="radio" name="outfitMode" value="mix">
+                            組裝模式
+                        </label>
+                    </div>
+
+                    <span class="hint mode-description" id="modeDescription">
+                        先選一種風格，再從該風格的服飾中隨機搭配
+                    </span>
+                </div>
+            </div>
+
+            <!-- 共用搭配偏好 -->
+            <div class="setting-row">
+                <span class="setting-label">搭配偏好</span>
+
+                <div class="setting-content">
+                    <div class="preference-controls">
+
+                        <label class="preference-field" for="genderMode">
+                            <span>性別</span>
+                            <select id="genderMode">
+                                <option value="any">不限</option>
+                                <option value="feminine">偏女性</option>
+                                <option value="masculine">偏男性</option>
+                            </select>
+                        </label>
+
+                        <label class="preference-field" for="seasonMode">
+                            <span>季節</span>
+                            <select id="seasonMode">
+                                <option value="any">不限</option>
+                                <option value="spring">春季</option>
+                                <option value="summer">夏季</option>
+                                <option value="autumn">秋季</option>
+                                <option value="winter">冬季</option>
+                            </select>
+                        </label>
+
+                        <label class="preference-field" for="occasionMode">
+                            <span>場合</span>
+                            <select id="occasionMode">
+                                <option value="any">不限</option>
+                                <option value="casual">日常休閒</option>
+                                <option value="school">上學</option>
+                                <option value="work">工作</option>
+                                <option value="formal">正式場合</option>
+                                <option value="party">派對聚會</option>
+                                <option value="date">約會</option>
+                                <option value="outdoor">戶外活動</option>
+                                <option value="travel">旅行</option>
+                                <option value="stage">舞台表演</option>
+                                <option value="festival">節慶活動</option>
+                            </select>
+                        </label>
+
+                    </div>
+
+                    <span class="hint">
+                        皆為搭配傾向，不會完全排除其他服飾
+                    </span>
+                </div>
+            </div>
+
+            <!-- 套裝模式設定 -->
+            <div class="setting-row mode-setting" id="styleSettings">
+                <label class="setting-label" for="styleMode">套裝風格</label>
+
+                <div class="setting-content mode-setting-content">
+                    <select id="styleMode">
+                        <option value="random" selected>隨機風格</option>
+                    </select>
+
+                    <span class="hint">
+                        同一套會依照選定風格挑選各部位服飾
+                    </span>
+                </div>
+            </div>
+
+            <!-- 組裝模式設定 -->
+            <div class="setting-row mode-setting" id="mixSettings" hidden>
+                <span class="setting-label">服裝組成</span>
+
+                <div class="setting-content mix-options">
+
+                    <label class="mix-option">
+                        <span>配件數量</span>
+                        <select id="accessoryCount">
+                            <option value="0">0 件</option>
+                            <option value="1">1 件</option>
+                            <option value="2" selected>2 件</option>
+                            <option value="3">3 件</option>
+                        </select>
+                    </label>
+
+                    <label class="mix-option">
+                        <input id="includeOuterwear" type="checkbox" checked>
+                        <span>加入外套</span>
+                    </label>
+
+                    <label class="mix-option">
+                        <input id="includeDetail" type="checkbox" checked>
+                        <span>加入服裝細節</span>
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- 生成按鈕 -->
+            <div class="setting-actions">
+                <button class="primary" id="generate" type="button">
+                    ✨ 生成穿搭
+                </button>
+            </div>
+
+        </section>
+
+        <section class="panel result-panel" aria-live="polite">
+            <div class="result-heading">
+                <div>
+                    <h2 id="resultTitle">今日穿搭</h2>
+                    <p id="resultSubtitle" class="hint">按下生成，看看今天會抽到什麼</p>
+                </div>
+                <button class="secondary" id="copyResult" type="button" disabled>複製穿搭</button>
+            </div>
+            <div id="outfitResult" class="outfit-result">
+                <p class="empty-state">服裝設計師水母尚未開工（？）</p>
+            </div>
+            <p id="status" class="status" role="status"></p>
+        </section>
+    </main>
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+    <script src="../Shared/layout.js"></script>
+</body>
+
+</html>

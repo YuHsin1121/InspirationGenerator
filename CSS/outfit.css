@@ -1,22 +1,397 @@
-/* 尚未實作工具的共用頁面樣式 */
-.tool-page {
-    width: min(100% - 32px, 850px);
-    margin: 24px auto 0;
+/* 服裝亂配部 */
+.outfit-page {
+    width: min(100% - 32px, 900px);
+    margin: 24px auto 40px;
 }
 
-.tool-page h1 {
-    margin: 0 0 8px;
+.page-heading {
+    margin-bottom: 18px;
 }
 
-.tool-page p {
-    color: #777386;
+.page-heading h1 {
+    margin: 0 0 6px;
+    font-size: 1.55rem;
 }
 
-.coming-soon {
-    margin-top: 28px;
-    padding: 24px;
-    border: 1px dashed #dcd5e7;
+.page-heading p {
+    margin: 0;
+    color: var(--muted-color, #817992);
+}
+
+.outfit-page .panel {
+    margin-bottom: 14px;
+    padding: 18px;
+    border: 1px solid #e9e5f1;
     border-radius: 14px;
     background: #fff;
+    box-shadow: 0 3px 14px #3331;
+}
+
+.outfit-page [hidden] {
+    display: none !important;
+}
+
+/* 設定區 */
+.setting-row {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+}
+
+.setting-row+.setting-row {
+    margin-top: 10px;
+    padding-top: 13px;
+    border-top: 1px solid #eeeaf4;
+}
+
+.setting-label {
+    font-size: .9rem;
+    font-weight: 650;
+}
+
+.setting-content {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+}
+
+.hint {
+    color: #817992;
+    font-size: .82rem;
+}
+
+/* 搭配模式 */
+.mode-controls {
+    gap: 12px 18px;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.option-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+.outfit-page input {
+    accent-color: #7763a8;
+}
+
+/* 下拉選單共用 */
+.outfit-page select {
+    min-width: 120px;
+    max-width: 100%;
+    height: 38px;
+    padding: 6px 10px;
+    border: 1px solid #dcd5e7;
+    border-radius: 8px;
+    background: #fff;
+    color: #353444;
+    font: inherit;
+}
+
+/* 搭配偏好 */
+.preference-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+}
+
+.preference-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: .9rem;
+}
+
+.preference-field select {
+    min-width: 120px;
+}
+
+/* 模式專屬設定 */
+.mode-setting {
+    align-items: center;
+}
+
+.mode-setting-content {
+    gap: 10px 14px;
+}
+
+/* 服裝組成 */
+.mix-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+}
+
+.mix-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #514d61;
+    font-size: .9rem;
+}
+
+.mix-option input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #7763a8;
+    cursor: pointer;
+}
+
+.mix-option select {
+    min-width: 72px;
+    height: 34px;
+    padding: 4px 8px;
+    border: 1px solid #dcd5e7;
+    border-radius: 8px;
+    background: #fff;
+    font-size: .88rem;
+}
+
+/* 生成按鈕 */
+.setting-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid #eeeaf4;
+}
+
+.outfit-page button {
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 9px;
+    font: inherit;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.outfit-page button.primary {
+    background: #7763a8;
+    color: #fff;
+}
+
+.outfit-page button.primary:hover {
+    background: #64518f;
+}
+
+.outfit-page button.secondary {
+    background: #f0edf6;
+    color: #54496e;
+}
+
+.outfit-page button.secondary:hover {
+    background: #e5dff0;
+}
+
+.outfit-page button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* 穿搭結果 */
+.result-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.result-heading h2 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+}
+
+.result-heading p {
+    margin: 0;
+}
+
+.outfit-intro {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.outfit-intro strong {
+    font-size: 1.05rem;
+}
+
+.outfit-intro span {
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #f0edf6;
+    color: #66528f;
+    font-size: .78rem;
+}
+
+.outfit-items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.outfit-item {
+    display: flex;
+    min-width: 0;
+    min-height: 68px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 12px;
+    border: 1px solid #e7e0f3;
+    border-radius: 10px;
+    background: #f8f6fc;
+}
+
+.outfit-item small {
+    color: #817992;
+    font-size: .78rem;
+}
+
+.outfit-item strong {
+    overflow-wrap: anywhere;
+    font-size: .94rem;
+}
+
+.empty-state {
+    margin: 0;
+    padding: 28px 12px;
+    border: 1px dashed #dcd5e7;
+    border-radius: 10px;
+    color: #817992;
     text-align: center;
+}
+
+.status {
+    min-height: 1.2em;
+    margin: 12px 0 0;
+    color: #706785;
+    font-size: .82rem;
+}
+
+/* 平板 */
+@media (max-width: 760px) {
+    .setting-row {
+        grid-template-columns: 75px minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .preference-controls {
+        gap: 9px 12px;
+    }
+
+    .preference-field {
+        gap: 6px;
+    }
+
+    .preference-field select {
+        min-width: 105px;
+    }
+
+    .outfit-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* 手機 */
+@media (max-width: 520px) {
+    .outfit-page {
+        width: calc(100% - 24px);
+        margin-top: 16px;
+    }
+
+    .outfit-page .panel {
+        padding: 13px;
+    }
+
+    .setting-row {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .setting-row+.setting-row {
+        margin-top: 9px;
+        padding-top: 11px;
+    }
+
+    .setting-label {
+        font-size: .88rem;
+    }
+
+    .setting-content {
+        gap: 9px;
+    }
+
+    .mode-controls {
+        gap: 9px;
+    }
+
+    .mode-description {
+        flex-basis: 100%;
+    }
+
+    .preference-controls {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .preference-field {
+        min-width: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .preference-field select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .mix-options {
+        gap: 8px 14px;
+    }
+
+    .mix-option {
+        font-size: .82rem;
+    }
+
+    .outfit-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .outfit-item {
+        min-height: 62px;
+        padding: 9px;
+    }
+
+    .result-heading {
+        align-items: flex-start;
+    }
 }
