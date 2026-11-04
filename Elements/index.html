@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>水母靈感研究所｜隨機元素</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#353444;background:#f8f7fc}*{box-sizing:border-box}body{margin:0;padding:28px 16px}.wrap{max-width:850px;margin:auto}h1{font-size:1.55rem;margin:0 0 6px}p{color:#747184;margin:0 0 22px}.panel{background:white;border:1px solid #e9e5f1;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 3px 14px #3331}.top{display:flex;gap:15px;align-items:center;flex-wrap:wrap;justify-content:space-between}.toggle{display:flex;gap:8px;align-items:center;cursor:pointer}.muted{color:#777386;font-size:.9rem}details.category-panel summary{cursor:pointer;font-weight:700;list-style-position:inside}details.category-panel[open] summary{margin-bottom:12px}.category-head{display:flex;align-items:center;justify-content:space-between;margin:18px 0 10px}.categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.category{border:1px solid #e6e1ed;border-radius:9px;padding:10px;display:flex;gap:8px;align-items:center;cursor:pointer}.category:has(input:disabled){opacity:.48}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}select,button{font:inherit;border-radius:9px;padding:10px 14px}select{border:1px solid #dcd5e7;background:white}button{border:0;background:#7763a8;color:white;cursor:pointer}button:hover{background:#64518f}button.secondary{background:#f0edf6;color:#54496e}button:disabled{opacity:.5;cursor:not-allowed}.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px}.result{background:#f7f4fc;border:1px solid #e7e0f3;border-radius:12px;padding:15px;min-height:110px;display:flex;flex-direction:column;gap:8px}.result small{color:#817992}.result strong{font-size:1.2rem;overflow-wrap:anywhere}.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}#status{color:#706785;font-size:.88rem}input{accent-color:#7763a8}@media(max-width:600px){body{padding:16px 12px}.panel{padding:16px}.categories{grid-template-columns:repeat(2,minmax(0,1fr))}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.result{padding:12px}.result strong{font-size:1.05rem}}@media(max-width:350px){.categories,.results{grid-template-columns:1fr}}
+.palette-section{margin-top:20px;padding-top:16px;border-top:1px solid #e9e5f1}.palette-colors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}.palette-color{min-width:0;text-align:center;font-size:.82rem}.palette-swatch{height:56px;border-radius:9px;border:1px solid #0001;margin-bottom:6px}.palette-color span{overflow-wrap:anywhere}.palette-section .muted{font-size:.8rem}@media(max-width:420px){.palette-colors{gap:4px}.palette-color{font-size:.65rem}.palette-swatch{height:44px}}
+</style>
+</head>
+<body><main class="wrap">
+<h1>🎲 隨機元素實驗室</h1><p>抽出毫無關聯的元素，剩下的交給想像力（？）</p>
+<section class="panel">
+<div class="top"><label class="toggle"><input id="allRandom" type="checkbox" checked> <strong>完全隨機</strong></label><span class="muted">開啟時從全部元素抽取，無需指定類別</span></div>
+<div class="controls"><label for="count">抽取數量</label><select id="count"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label class="toggle"><input id="includePalette" type="checkbox" checked> 同時抽取色盤</label><button id="generate" type="button">🎲 重新抽題</button></div>
+</section>
+<section class="panel"><strong>本次抽取結果</strong><div class="results" id="results" aria-live="polite"></div><div id="paletteSection" class="palette-section" hidden><strong>本次配色</strong><div class="palette-colors" id="paletteColors"></div><div class="muted" id="paletteInfo"></div></div><div class="actions"><button class="secondary" id="copyAll" type="button">複製全部結果</button><span id="status" role="status">點擊抽取元素開始</span></div></section>
+<section class="panel"><details class="category-panel" id="categoryPanel"><summary>指定元素類別（取消完全隨機後使用）</summary><div class="category-head"><span class="muted">選擇要加入抽取範圍的類別</span><div><button class="secondary" id="selectAll" type="button">全選</button> <button class="secondary" id="clearAll" type="button">清除</button></div></div><div class="categories" id="categories"></div></details></section>
+</main>
+<script src="./data.js"></script>
+<script src="../Palette/palette.js"></script>
+<script src="./app.js"></script>
+</body></html>
