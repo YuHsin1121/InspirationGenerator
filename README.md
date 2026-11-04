@@ -1,1 +1,1 @@
-🎨 [戳戳](https://yuhsin1121.github.io/PaletteGenerator/)
+[戳戳](https://yuhsin1121.github.io/InspirationGenerator/)
