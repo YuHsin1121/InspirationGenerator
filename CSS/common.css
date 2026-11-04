@@ -1,0 +1,232 @@
+/* 全站共用設定 */
+:root {
+    --page-bg: #f8f7fc;
+    --text-color: #353444;
+    --muted-color: #817992;
+    --nav-hover: #eeeaf5;
+    --nav-active: #eae5f4;
+    --nav-accent: #66528f;
+
+    font-family: system-ui, -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    color: var(--text-color);
+    background: var(--page-bg);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: var(--page-bg);
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: var(--page-bg);
+    color: var(--text-color);
+    font-family: inherit;
+}
+
+/* 全站導覽列：所有頁面共用相同尺寸與字型 */
+.site-header {
+    width: min(100% - 40px, 1100px);
+    margin: 0 auto 22px;
+    padding-top: 12px;
+    font: inherit;
+    color: inherit;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 48px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    font: inherit;
+}
+
+.site-brand {
+    color: inherit;
+    text-decoration: none;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.site-links {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    font: inherit;
+}
+
+.site-links > a,
+.nav-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 10px;
+    color: #514d61;
+    background: transparent;
+    text-decoration: none;
+    font: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+    list-style: none;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+}
+
+.nav-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-group > summary::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform .2s ease;
+}
+
+.nav-group[open] > summary::after {
+    transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.site-links > a:hover,
+.nav-group > summary:hover {
+    background: var(--nav-hover);
+}
+
+.site-links > a[aria-current="page"],
+.nav-group.active > summary {
+    background: var(--nav-active);
+    color: var(--nav-accent);
+    font-weight: 650;
+}
+
+.nav-group {
+    position: relative;
+    font: inherit;
+}
+
+.nav-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    display: flex;
+    min-width: 190px;
+    flex-direction: column;
+    gap: 3px;
+    padding: 7px;
+    border: 1px solid #e9e5f1;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 24px #35344418;
+    animation: menu-in .15s ease;
+}
+
+.nav-menu a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #514d61;
+    text-decoration: none;
+    font: inherit;
+    font-size: .87rem;
+    white-space: nowrap;
+    transition: background .15s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a[aria-current="page"] {
+    background: #eee9f7;
+    color: var(--nav-accent);
+}
+
+.nav-menu a[aria-current="page"] {
+    font-weight: 650;
+}
+
+@keyframes menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 返回首頁按鈕（舊頁面若仍有使用可保留） */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: var(--back-bg, #f0edf6);
+    color: var(--back-color, #54496e);
+    text-decoration: none;
+    font-size: 14px;
+    transition: background .15s ease;
+}
+
+.back-btn:hover {
+    background: var(--back-hover, #e5d9f5);
+}
+
+/* 鍵盤操作焦點 */
+.back-btn:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible,
+.nav-group > summary:focus-visible {
+    outline: 3px solid var(--focus-color, #a998d0);
+    outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+    .site-header {
+        width: min(100% - 28px, 1100px);
+        margin-bottom: 18px;
+    }
+
+    .site-nav {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .site-links {
+        width: 100%;
+        gap: 4px;
+    }
+
+    .nav-group {
+        position: static;
+    }
+
+    .nav-menu {
+        position: static;
+        min-width: 0;
+        margin-top: 4px;
+        box-shadow: none;
+    }
+}

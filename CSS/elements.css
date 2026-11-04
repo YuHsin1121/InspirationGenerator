@@ -1,0 +1,321 @@
+/* 隨機元素頁面 */
+.wrap {
+    width: min(100% - 32px, 850px);
+    margin: 20px auto 0;
+}
+
+.wrap h1 {
+    margin: 0 0 4px;
+    font-size: 1.45rem;
+}
+
+.subtitle {
+    margin: 0 0 14px;
+    color: #747184;
+    font-size: .9rem;
+}
+
+.panel {
+    margin-bottom: 12px;
+    padding: 14px;
+    border: 1px solid #e9e5f1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 3px 14px #3331;
+}
+
+/* 抽取模式 */
+.mode-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.mode-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+.mode-option input,
+.category input {
+    accent-color: #7763a8;
+}
+
+.mode-content {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eeeaf4;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: .9rem;
+}
+
+.wrap select,
+.wrap button {
+    padding: 7px 11px;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.wrap select {
+    border: 1px solid #dcd5e7;
+    background: #fff;
+    color: #353444;
+}
+
+.wrap button {
+    border: 0;
+    background: #7763a8;
+    color: #fff;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.wrap button:hover {
+    background: #64518f;
+}
+
+.wrap button.secondary {
+    background: #f0edf6;
+    color: #54496e;
+}
+
+.wrap button.secondary:hover {
+    background: #e5d9f5;
+}
+
+.wrap button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.hint {
+    color: #777386;
+    font-size: .82rem;
+}
+
+#randomSettings .hint {
+    margin: 8px 0 0;
+}
+
+/* 分類數量設定 */
+.category-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 9px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.category {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid #e6e1ed;
+    border-radius: 8px;
+}
+
+.category-name {
+    min-width: 0;
+    font-size: .85rem;
+    overflow-wrap: anywhere;
+}
+
+.category input {
+    width: 48px;
+    height: 32px;
+    min-width: 0;
+    padding: 3px;
+    border: 1px solid #dcd5e7;
+    border-radius: 8px;
+    color: #353444;
+    font: inherit;
+    font-size: .85rem;
+    text-align: center;
+}
+
+/* 總抽取數量 */
+.total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px solid #eeeaf4;
+    font-size: .9rem;
+}
+
+.total strong {
+    color: #7763a8;
+    font-size: 1rem;
+}
+
+/* 抽取按鈕 */
+.generate-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* 抽取結果 */
+.results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 9px;
+    margin-top: 10px;
+}
+
+.result {
+    display: flex;
+    min-height: 85px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 11px;
+    border: 1px solid #e7e0f3;
+    border-radius: 10px;
+    background: #f7f4fc;
+}
+
+.result small {
+    color: #817992;
+}
+
+.result strong {
+    font-size: 1.05rem;
+    overflow-wrap: anywhere;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 11px;
+}
+
+#status {
+    color: #706785;
+    font-size: .82rem;
+}
+
+/* 色盤結果 */
+.palette-section {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #e9e5f1;
+}
+
+.palette-colors {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
+    margin: 9px 0;
+}
+
+.palette-color {
+    min-width: 0;
+    font-size: .78rem;
+    text-align: center;
+}
+
+.palette-swatch {
+    height: 48px;
+    margin-bottom: 5px;
+    border: 1px solid #0001;
+    border-radius: 8px;
+}
+
+.palette-color span {
+    overflow-wrap: anywhere;
+}
+
+.palette-section .hint {
+    font-size: .78rem;
+}
+
+/* 平板及較窄畫面 */
+@media (max-width: 700px) {
+    .categories {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel {
+        padding: 13px;
+    }
+}
+
+/* 手機版 */
+@media (max-width: 420px) {
+    .wrap {
+        width: calc(100% - 24px);
+        margin-top: 14px;
+    }
+
+    .wrap h1 {
+        font-size: 1.3rem;
+    }
+
+    .subtitle {
+        font-size: .82rem;
+    }
+
+    .category {
+        gap: 4px;
+        padding: 6px;
+    }
+
+    .category-name {
+        font-size: .78rem;
+    }
+
+    .category input {
+        width: 42px;
+        height: 30px;
+        font-size: .8rem;
+    }
+
+    .results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .palette-colors {
+        gap: 4px;
+    }
+
+    .palette-color {
+        font-size: .65rem;
+    }
+
+    .palette-swatch {
+        height: 42px;
+    }
+}
+
+/* 極窄螢幕 */
+@media (max-width: 350px) {
+
+    .categories,
+    .results {
+        grid-template-columns: 1fr;
+    }
+}

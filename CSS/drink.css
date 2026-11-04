@@ -1,0 +1,22 @@
+/* 尚未實作工具的共用頁面樣式 */
+.tool-page {
+    width: min(100% - 32px, 850px);
+    margin: 24px auto 0;
+}
+
+.tool-page h1 {
+    margin: 0 0 8px;
+}
+
+.tool-page p {
+    color: #777386;
+}
+
+.coming-soon {
+    margin-top: 28px;
+    padding: 24px;
+    border: 1px dashed #dcd5e7;
+    border-radius: 14px;
+    background: #fff;
+    text-align: center;
+}

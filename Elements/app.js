@@ -7,269 +7,372 @@ const categoryNames = Object.keys(DATA);
 let current = [];
 let currentPalette = [];
 
-// 建立分類選項
+// 隨機打亂陣列
+function shuffle(items) {
+    const result = [...items];
+
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+
+    return result;
+}
+
+// 從陣列中抽取指定數量的不重複元素
+function pickRandom(items, count) {
+    return shuffle(items).slice(0, count);
+}
+
+// 取得目前抽取模式
+function getMode() {
+    return document.querySelector(
+        'input[name="mode"]:checked'
+    ).value;
+}
+
+// 建立分類數量輸入框
 function buildCategories() {
-  $('categories').replaceChildren();
+    const container = $('categories');
+    container.replaceChildren();
 
-  for (const name of categoryNames) {
-    const label = document.createElement('label');
-    label.className = 'category';
+    categoryNames.forEach((name, index) => {
+        const label = document.createElement('label');
+        label.className = 'category';
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.value = name;
-    checkbox.checked = false;
+        const title = document.createElement('span');
+        title.className = 'category-name';
+        title.textContent = name;
 
-    label.append(checkbox, document.createTextNode(name));
-    $('categories').append(label);
-  }
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0';
+        input.max = String(new Set(DATA[name]).size);
+        input.step = '1';
+        input.value = '0';
+        input.id = `categoryCount${index}`;
+        input.dataset.category = name;
+        input.setAttribute('aria-label', `${name}抽取數量`);
 
-  syncMode();
+        input.addEventListener('input', updateCustomTotal);
+
+        label.append(title, input);
+        container.append(label);
+    });
+
+    updateCustomTotal();
 }
 
-// 完全隨機時停用分類選項
+// 取得各分類設定
+function getCustomCounts() {
+    return [...document.querySelectorAll('#categories input')].map(input => ({
+        category: input.dataset.category,
+        value: input.value,
+        count: Number(input.value)
+    }));
+}
+
+// 更新自訂抽取總數
+function updateCustomTotal() {
+    const settings = getCustomCounts();
+
+    const valid = settings.every(item =>
+        item.value.trim() !== '' &&
+        Number.isSafeInteger(item.count) &&
+        item.count >= 0
+    );
+
+    if (!valid) {
+        $('customTotal').textContent = '請輸入有效數量';
+        return;
+    }
+
+    const total = settings.reduce(
+        (sum, item) => sum + item.count,
+        0
+    );
+
+    $('customTotal').textContent = `${total} 個`;
+}
+
+// 切換抽取模式
 function syncMode() {
-  const isRandom = $('allRandom').checked;
+    const isRandom = getMode() === 'random';
 
-  document.querySelectorAll('#categories input').forEach(input => {
-    input.disabled = isRandom;
-  });
-
-  $('selectAll').disabled = isRandom;
-  $('clearAll').disabled = isRandom;
+    $('randomSettings').hidden = !isRandom;
+    $('customSettings').hidden = isRandom;
 }
 
-// 取得目前允許抽取的元素
-function pool() {
-  const chosen = $('allRandom').checked
-    ? categoryNames
-    : [...document.querySelectorAll('#categories input:checked')].map(x => x.value);
+// 建立全部元素池
+function getAllItems() {
+    const items = [];
+    const seen = new Set();
 
-  return chosen.flatMap(category =>
-    DATA[category].map(value => ({ category, value }))
-  );
+    categoryNames.forEach(category => {
+        DATA[category].forEach(value => {
+            // 不讓相同詞語在同一次抽取中重複
+            if (seen.has(value)) return;
+
+            seen.add(value);
+            items.push({ category, value });
+        });
+    });
+
+    return items;
 }
 
-// 保證至少有一個可辨認的創作主體
-const SUBJECT_CATEGORIES = new Set([
-  '人物與種族',
-  '物品與道具',
-  '動物與植物',
-  '場景與地點'
-]);
+// 完全隨機抽取
+function generateRandom() {
+    const count = Number($('randomCount').value);
+    const available = getAllItems();
 
-// 避免整組題目都是天氣、抽象概念或裝飾材質
-const LIMITED_CATEGORIES = new Set([
-  '自然與天象',
-  '氛圍與概念',
-  '材質與圖案'
-]);
+    if (!Number.isSafeInteger(count) || count < 1) {
+        throw new Error('請選擇有效的抽取數量');
+    }
 
-const CATEGORY_LIMITS = {
-  '自然與天象': 1,
-  '氛圍與概念': 1,
-  '材質與圖案': 1
-};
+    if (count > available.length) {
+        throw new Error('詞庫元素不足，無法抽取指定數量');
+    }
 
-// 顯示抽出的元素
-function render() {
-  $('results').replaceChildren();
-
-  current.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'result';
-
-    const category = document.createElement('small');
-    category.textContent = item.category;
-
-    const word = document.createElement('strong');
-    word.textContent = item.value;
-
-    card.append(category, word);
-    $('results').append(card);
-  });
-
-  $('copyAll').disabled = !current.length;
+    return pickRandom(available, count);
 }
 
-// 顯示共用色盤模組產生的結果
+// 自訂抽取
+function generateCustom() {
+    const settings = getCustomCounts();
+
+    // 檢查數量設定
+    for (const item of settings) {
+        if (
+            item.value.trim() === '' ||
+            !Number.isSafeInteger(item.count) ||
+            item.count < 0
+        ) {
+            throw new Error('請輸入有效的非負整數');
+        }
+
+        const availableCount = new Set(
+            DATA[item.category]
+        ).size;
+
+        if (item.count > availableCount) {
+            throw new Error(
+                `${item.category}只有 ${availableCount} 個不同元素`
+            );
+        }
+    }
+
+    const total = settings.reduce(
+        (sum, item) => sum + item.count,
+        0
+    );
+
+    if (total === 0) {
+        throw new Error('請至少設定一個分類的抽取數量');
+    }
+
+    const activeSettings = settings.filter(
+        item => item.count > 0
+    );
+
+    // 不同分類可能包含相同詞語，嘗試不同抽取順序
+    for (let attempt = 0; attempt < 200; attempt++) {
+        const selected = [];
+        const used = new Set();
+
+        const order = shuffle(activeSettings);
+
+        let success = true;
+
+        for (const item of order) {
+            const available = [...new Set(DATA[item.category])]
+                .filter(value => !used.has(value));
+
+            if (available.length < item.count) {
+                success = false;
+                break;
+            }
+
+            const picked = pickRandom(
+                available,
+                item.count
+            );
+
+            picked.forEach(value => {
+                selected.push({
+                    category: item.category,
+                    value
+                });
+
+                used.add(value);
+            });
+        }
+
+        if (success) {
+            return shuffle(selected);
+        }
+    }
+
+    throw new Error(
+        '不同分類之間有重複元素，無法滿足目前數量設定，請調整抽取數量'
+    );
+}
+
+// 顯示抽取結果
+function renderResults() {
+    const container = $('results');
+    container.replaceChildren();
+
+    current.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'result';
+
+        const category = document.createElement('small');
+        category.textContent = item.category;
+
+        const word = document.createElement('strong');
+        word.textContent = item.value;
+
+        card.append(category, word);
+        container.append(card);
+    });
+
+    $('copyAll').disabled = current.length === 0;
+}
+
+// 顯示色盤
 function renderPalette(palette) {
-  currentPalette = palette.colors;
-  $('paletteInfo').textContent = `${palette.style} × ${palette.scheme}`;
-  $('paletteColors').replaceChildren();
+    currentPalette = palette.colors;
 
-  palette.colors.forEach(hex => {
-    const color = document.createElement('div');
-    color.className = 'palette-color';
+    $('paletteInfo').textContent =
+        `${palette.style} × ${palette.scheme}`;
 
-    const swatch = document.createElement('div');
-    swatch.className = 'palette-swatch';
-    swatch.style.backgroundColor = hex;
+    const container = $('paletteColors');
+    container.replaceChildren();
 
-    const label = document.createElement('span');
-    label.textContent = hex;
+    palette.colors.forEach(hex => {
+        const color = document.createElement('div');
+        color.className = 'palette-color';
 
-    color.append(swatch, label);
-    $('paletteColors').append(color);
-  });
+        const swatch = document.createElement('div');
+        swatch.className = 'palette-swatch';
+        swatch.style.backgroundColor = hex;
+
+        const label = document.createElement('span');
+        label.textContent = hex;
+
+        color.append(swatch, label);
+        container.append(color);
+    });
 }
 
 // 重新抽取元素及色盤
 function generate() {
-  const available = pool();
+    let selected;
 
-  if (!available.length) {
-    $('status').textContent = '請先勾選至少一個類別，或開啟完全隨機';
-    return;
-  }
-
-  const count = Number($('count').value);
-  const subjects = available.filter(item =>
-    SUBJECT_CATEGORIES.has(item.category)
-  );
-
-  if (!subjects.length) {
-    $('status').textContent = '請勾選至少一個主體類別（人物、道具、動植物或場景）';
-    return;
-  }
-
-  const selected = [];
-  const remaining = [...available];
-
-  // 隨機抽取，並排除同一組內的重複詞語
-  function addRandom(candidates) {
-    if (!candidates.length) return false;
-
-    const item = candidates[Math.floor(Math.random() * candidates.length)];
-    selected.push(item);
-
-    for (let i = remaining.length - 1; i >= 0; i--) {
-      if (remaining[i].value === item.value) {
-        remaining.splice(i, 1);
-      }
+    try {
+        selected = getMode() === 'random'
+            ? generateRandom()
+            : generateCustom();
+    } catch (error) {
+        $('status').textContent = error.message;
+        return;
     }
 
-    return true;
-  }
+    current = selected;
+    renderResults();
 
-  // 第一項必須是明確主體
-  addRandom(subjects);
+    // 清除上一組色盤
+    currentPalette = [];
+    $('paletteSection').hidden = true;
+    $('paletteColors').replaceChildren();
 
-  while (selected.length < count) {
-    const eligible = remaining.filter(item =>
-      !CATEGORY_LIMITS[item.category] ||
-      selected.filter(x => x.category === item.category).length <
-        CATEGORY_LIMITS[item.category]
-    );
+    if ($('includePalette').checked) {
+        if (!window.PaletteEngine) {
+            $('status').textContent =
+                '元素抽取完成，但色盤模組載入失敗';
+            return;
+        }
 
-    if (!eligible.length) break;
+        const palette = PaletteEngine.makePalette(
+            '隨機',
+            '隨機'
+        );
 
-    // 三個以上的題目，至少兩項不能是純背景、抽象或材質
-    const drawableCount = selected.filter(
-      x => !LIMITED_CATEGORIES.has(x.category)
-    ).length;
+        renderPalette(palette);
+        $('paletteSection').hidden = false;
+    }
 
-    const slotsLeft = count - selected.length;
-    const needDrawable =
-      count >= 3 && drawableCount < 2 && slotsLeft <= 1;
-
-    const candidates = needDrawable
-      ? eligible.filter(x => !LIMITED_CATEGORIES.has(x.category))
-      : eligible;
-
-    if (!addRandom(candidates)) break;
-  }
-
-  // 打散結果順序
-  for (let i = selected.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [selected[i], selected[j]] = [selected[j], selected[i]];
-  }
-
-  current = selected;
-  render();
-
-  // 勾選時使用 Palette/palette.js 的共用配色演算法
-  currentPalette = [];
-  $('paletteSection').hidden = !$('includePalette').checked;
-
-  if ($('includePalette').checked) {
-    const palette = PaletteEngine.makePalette('隨機', '隨機');
-    renderPalette(palette);
-  }
-
-  $('status').textContent = selected.length === count
-    ? '抽取完成！'
-    : `符合條件的元素不足，本次抽出 ${selected.length} 項`;
+    $('status').textContent =
+        `抽取完成！共 ${current.length} 個元素`;
 }
 
-// 複製文字，支援 Clipboard API 與備用方法
+// 複製文字
 async function copyText(value) {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(value);
-      return true;
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(value);
+            return true;
+        }
+
+        const area = document.createElement('textarea');
+        area.value = value;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+
+        document.body.append(area);
+        area.focus();
+        area.select();
+
+        try {
+            return document.execCommand('copy');
+        } finally {
+            area.remove();
+        }
+    } catch {
+        return false;
     }
-
-    const area = document.createElement('textarea');
-    area.value = value;
-    area.style.position = 'fixed';
-    area.style.opacity = '0';
-
-    document.body.append(area);
-    area.focus();
-    area.select();
-
-    const ok = document.execCommand('copy');
-    area.remove();
-
-    return ok;
-  } catch {
-    return false;
-  }
 }
 
-// 切換完全隨機模式
-$('allRandom').addEventListener('change', () => {
-  syncMode();
-
-  if (!$('allRandom').checked) {
-    $('categoryPanel').open = true;
-  }
+// 切換抽取模式
+document.querySelectorAll('input[name="mode"]').forEach(input => {
+    input.addEventListener('change', syncMode);
 });
 
-// 分類全選與清除
-$('selectAll').addEventListener('click', () => {
-  document.querySelectorAll('#categories input').forEach(x => {
-    x.checked = true;
-  });
-});
-
+// 清除自訂分類數量
 $('clearAll').addEventListener('click', () => {
-  document.querySelectorAll('#categories input').forEach(x => {
-    x.checked = false;
-  });
+    document.querySelectorAll('#categories input').forEach(input => {
+        input.value = '0';
+    });
+
+    updateCustomTotal();
 });
 
 // 重新抽題
 $('generate').addEventListener('click', generate);
 
-// 複製元素及色盤
+// 複製全部結果
 $('copyAll').addEventListener('click', async () => {
-  const text = [
-    current.map(x => x.value).join(' × '),
-    ...(currentPalette.length
-      ? ['色盤：' + currentPalette.join(', ')]
-      : [])
-  ].join('\n');
+    if (!current.length) return;
 
-  const success = await copyText(text);
+    const lines = [
+        current.map(item => item.value).join(' × ')
+    ];
 
-  $('status').textContent = success
-    ? '已複製全部結果！'
-    : '複製失敗，請手動選取文字';
+    if (currentPalette.length) {
+        lines.push(
+            '色盤：' + currentPalette.join(', ')
+        );
+    }
+
+    const success = await copyText(lines.join('\n'));
+
+    $('status').textContent = success
+        ? '已複製全部結果！'
+        : '複製失敗，請手動選取文字';
 });
 
 // 初始化
 buildCategories();
+syncMode();
 generate();

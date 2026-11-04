@@ -1,3 +1,4 @@
+
 'use strict';
 
 const {
@@ -6,8 +7,12 @@ const {
     ROLES: colorRoles
 } = PaletteEngine;
 
-const styleEl = document.getElementById('style');
-const schemeEl = document.getElementById('scheme');
+const $ = id => document.getElementById(id);
+
+const styleEl = $('style');
+const schemeEl = $('scheme');
+
+let currentColors = [];
 
 // 建立風格與配色關係選項
 for (const [el, values] of [
@@ -22,15 +27,14 @@ for (const [el, values] of [
     }
 }
 
-let currentColors = [];
-
+// 更新狀態訊息
 function setStatus(message) {
-    document.getElementById('status').textContent = message;
+    $('status').textContent = message;
 }
 
+// 複製文字
 async function copyText(value, message) {
     try {
-        // GitHub Pages 的 HTTPS 環境可使用 Clipboard API
         if (navigator.clipboard && window.isSecureContext) {
             await navigator.clipboard.writeText(value);
         } else {
@@ -43,23 +47,62 @@ async function copyText(value, message) {
             area.focus();
             area.select();
 
-            if (!document.execCommand('copy')) {
-                throw new Error('無法複製');
+            try {
+                if (!document.execCommand('copy')) {
+                    throw new Error('無法複製');
+                }
+            } finally {
+                area.remove();
             }
-
-            area.remove();
         }
 
         setStatus(message);
-    } catch (e) {
+    } catch {
         setStatus('複製失敗，請手動選取 HEX 色碼');
     }
 }
 
+// 顯示色盤
+function renderPalette(colors) {
+    const palette = $('palette');
+    palette.replaceChildren();
+
+    colors.forEach((hex, i) => {
+        const item = document.createElement('div');
+        item.className = 'color-item';
+
+        const swatch = document.createElement('button');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = hex;
+        swatch.title = `複製 ${hex}`;
+        swatch.setAttribute('aria-label', `複製 ${hex}`);
+
+        swatch.addEventListener('click', () => {
+            copyText(hex, `已複製：${hex}`);
+        });
+
+        const role = document.createElement('div');
+        role.className = 'role';
+        role.textContent = colorRoles[i];
+
+        const label = document.createElement('button');
+        label.className = 'hex';
+        label.textContent = hex;
+
+        label.addEventListener('click', () => {
+            copyText(hex, `已複製：${hex}`);
+        });
+
+        item.append(swatch, role, label);
+        palette.appendChild(item);
+    });
+}
+
+// 產生色盤
 function generate() {
     let result;
 
-    if (document.getElementById('fullyRandom').checked) {
+    if ($('fullyRandom').checked) {
         result = PaletteEngine.makeRandomPalette();
     } else {
         result = PaletteEngine.makePalette(
@@ -70,55 +113,26 @@ function generate() {
 
     currentColors = result.colors;
 
-    document.getElementById('info').textContent =
+    $('info').textContent =
         `${result.style}  ×  ${result.scheme}`;
 
-    const palette = document.getElementById('palette');
-    palette.replaceChildren();
-
-    result.colors.forEach((hex, i) => {
-        const item = document.createElement('div');
-        item.className = 'color-item';
-
-        const swatch = document.createElement('button');
-        swatch.className = 'swatch';
-        swatch.style.backgroundColor = hex;
-        swatch.title = `複製 ${hex}`;
-        swatch.setAttribute('aria-label', `複製 ${hex}`);
-
-        swatch.addEventListener('click', () =>
-            copyText(hex, `已複製：${hex}`)
-        );
-
-        const role = document.createElement('div');
-        role.className = 'role';
-        role.textContent = colorRoles[i];
-
-        const label = document.createElement('button');
-        label.className = 'hex';
-        label.textContent = hex;
-
-        label.addEventListener('click', () =>
-            copyText(hex, `已複製：${hex}`)
-        );
-
-        item.append(swatch, role, label);
-        palette.appendChild(item);
-    });
+    renderPalette(result.colors);
 
     setStatus('點擊色票或 HEX 可複製色碼');
 }
 
-document.getElementById('generate')
-    .addEventListener('click', generate);
+// 抽取色盤
+$('generate').addEventListener('click', generate);
 
-document.getElementById('copyAll')
-    .addEventListener('click', () =>
-        copyText(
-            currentColors.join(', '),
-            '已複製整組 HEX 色碼！'
-        )
+// 複製整組 HEX
+$('copyAll').addEventListener('click', () => {
+    if (!currentColors.length) return;
+
+    copyText(
+        currentColors.join(', '),
+        '已複製整組 HEX 色碼！'
     );
+});
 
 // 頁面載入時自動產生色盤
 generate();

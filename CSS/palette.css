@@ -1,0 +1,196 @@
+/* 色盤頁面 */
+.app {
+    width: min(100% - 28px, 780px);
+    margin: 24px auto 0;
+    padding: 22px;
+    border: 1px solid #e5e7ed;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 5px 22px #19283c0a;
+}
+
+.app h1 {
+    margin: 0 0 20px;
+    font-size: 21px;
+}
+
+/* 抽取設定 */
+.controls {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.field select {
+    height: 38px;
+    min-width: 175px;
+    max-width: 100%;
+    padding: 0 9px;
+    border: 1px solid #cbd0da;
+    border-radius: 7px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.check input {
+    width: 17px;
+    height: 17px;
+    accent-color: #495f8c;
+}
+
+.app button {
+    padding: 9px 13px;
+    border: 1px solid #cbd0da;
+    border-radius: 7px;
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.app button.primary {
+    border-color: #425c8c;
+    background: #425c8c;
+    color: #fff;
+}
+
+.app button:hover {
+    filter: brightness(.96);
+}
+
+/* 色盤資訊 */
+.info {
+    min-height: 22px;
+    margin: 22px 0 14px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.palette {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.color-item {
+    min-width: 0;
+    text-align: center;
+}
+
+.swatch {
+    display: block;
+    width: 100%;
+    height: 44px;
+    padding: 0;
+    border: 0 !important;
+    border-radius: 5px !important;
+}
+
+.role {
+    margin: 9px 0 3px;
+    color: #5b6473;
+    font-size: 13px;
+}
+
+.hex {
+    padding: 4px 0 !important;
+    border: 0 !important;
+    color: #343e4d;
+    font-size: 13px !important;
+    font-weight: 600;
+    letter-spacing: .15px;
+}
+
+/* 底部操作 */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 36px;
+    margin-top: 16px;
+}
+
+.status {
+    color: #58647a;
+    font-size: 13px;
+}
+
+.footer button {
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+@media (max-width: 580px) {
+    .app {
+        margin-top: 18px;
+        padding: 16px 12px;
+    }
+
+    .app h1 {
+        font-size: 19px;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .field {
+        flex: 1 1 100%;
+    }
+
+    .field select {
+        width: 100%;
+    }
+
+    .check {
+        flex: 1;
+    }
+
+    .info {
+        margin-top: 18px;
+        font-size: 14px;
+    }
+
+    .palette {
+        gap: 4px;
+    }
+
+    .swatch {
+        height: 54px;
+    }
+
+    .role {
+        font-size: 12px;
+    }
+
+    .hex {
+        font-size: clamp(9px, 2.45vw, 12px) !important;
+    }
+
+    .footer {
+        align-items: flex-start;
+    }
+
+    .status {
+        padding-top: 8px;
+        line-height: 1.4;
+    }
+}

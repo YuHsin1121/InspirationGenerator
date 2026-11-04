@@ -1,45 +1,67 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>水母靈感研究所</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background: #f8f6fc;
-            color: #444;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        .tools {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 30px;
-        }
-        a {
-            display: inline-block;
-            padding: 14px 24px;
-            background: #e5d9f5;
-            color: #444;
-            border-radius: 12px;
-            text-decoration: none;
-        }
-        a:hover {
-            background: #d6c4ed;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jellyfish Lab｜水母亂亂研究所</title>
+<link rel="stylesheet" href="./CSS/common.css">
+<link rel="stylesheet" href="./CSS/home.css">
 </head>
-<body>
-    <h1>🪼 水母靈感研究所</h1>
-    <p>一些隨機產生靈感的小工具</p>
+<body data-page="home">
+<main class="container">
+    <header class="home-heading">
+        <h1>🪼 Jellyfish Lab</h1>
+        <p>水母亂亂研究所・一些奇怪又實用的小工具</p>
+    </header>
 
-    <div class="tools">
-        <a href="./Palette/index.html">🎨 色盤產生器</a>
-        <a href="./Elements/index.html">🎲 隨機元素生成器</a>
-    </div>
+    <section class="section">
+        <h2 class="section-title">🎨 創作研究部</h2>
+        <div class="tools">
+            <a class="tool-card" href="./Palette/index.html">
+                <span class="tool-name">🎨 色票撈撈所</span>
+                <span class="tool-description">今天要用什麼顏色？撈一組來看看</span>
+            </a>
+            <a class="tool-card" href="./Elements/index.html">
+                <span class="tool-name">🎲 靈感亂燉鍋</span>
+                <span class="tool-description">隨機組合各種元素，煮出奇怪的創作題目</span>
+            </a>
+            <a class="tool-card planned" href="./Outfit/index.html">
+                <span class="tool-name">👗 服裝亂配部</span>
+                <span class="tool-description">幫角色搭配各種奇妙服裝</span>
+                <span class="status">籌備中</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">🍙 生活決策部</h2>
+        <div class="tools">
+            <a class="tool-card planned" href="./Food/index.html">
+                <span class="tool-name">🍚 飯飯由命局</span>
+                <span class="tool-description">今天吃什麼？讓水母幫你決定</span>
+                <span class="status">籌備中</span>
+            </a>
+            <a class="tool-card planned" href="./Drink/index.html">
+                <span class="tool-name">🧋 飲料續命所</span>
+                <span class="tool-description">今天喝什麼？附近有什麼好喝的？</span>
+                <span class="status">籌備中</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">🔮 神祕研究部</h2>
+        <div class="tools">
+            <a class="tool-card planned" href="./Omikuji/index.html">
+                <span class="tool-name">⛩️ 水母神社</span>
+                <span class="tool-description">抽籤、占卜，以及其他不可名狀的儀式</span>
+                <span class="status">籌備中</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>Jellyfish Lab ・ Powered by randomness</footer>
+</main>
+<script src="./Shared/layout.js"></script>
 </body>
 </html>

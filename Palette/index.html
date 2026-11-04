@@ -1,73 +1,53 @@
-
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>水母色盤研究所</title>
-<style>
-:root{font-family:system-ui,-apple-system,"Microsoft JhengHei",sans-serif;color:#252b36;background:#f6f7fa}
-*{box-sizing:border-box}
-body{margin:0;padding:24px 14px}
-.app{max-width:780px;margin:0 auto;background:#fff;border:1px solid #e5e7ed;border-radius:14px;padding:22px;box-shadow:0 5px 22px #19283c0a}
-h1{font-size:21px;margin:0 0 20px}
-.controls{display:flex;align-items:end;flex-wrap:wrap;gap:12px}
-.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}
-.field select{height:38px;min-width:175px;max-width:100%;border:1px solid #cbd0da;border-radius:7px;padding:0 9px;background:white;font-size:14px}
-.check{height:38px;display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px}
-.check input{width:17px;height:17px;accent-color:#495f8c}
-button{font:inherit;cursor:pointer;border-radius:7px;border:1px solid #cbd0da;background:#fff;padding:9px 13px}
-button.primary{background:#425c8c;border-color:#425c8c;color:white}
-button:hover{filter:brightness(.96)}
-button:focus-visible,.swatch:focus-visible,.hex:focus-visible{outline:3px solid #7a9dd7;outline-offset:2px}
-.info{font-size:16px;font-weight:700;margin:22px 0 14px;min-height:22px}
-.palette{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.color-item{text-align:center;min-width:0}
-.swatch{width:100%;height:44px;border:0;border-radius:5px;display:block;padding:0}
-.role{font-size:13px;margin:9px 0 3px;color:#5b6473}
-.hex{border:0;padding:4px 0;font-size:13px;font-weight:600;letter-spacing:.15px;color:#343e4d}
-.footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;min-height:36px}
-.status{font-size:13px;color:#58647a}
-.footer button{white-space:nowrap;font-size:13px}
-.back-btn{display:inline-block;margin-bottom:18px;padding:8px 14px;background:#edf1f7;color:#425c8c;border-radius:8px;text-decoration:none;font-size:14px}
-.back-btn:hover{background:#dce5f2}
-.back-btn:focus-visible{outline:3px solid #7a9dd7;outline-offset:3px}
-@media(max-width:580px){
-body{padding:10px}
-.app{padding:16px 12px}
-h1{font-size:19px}
-.controls{gap:10px}
-.field{flex:1 1 100%}
-.field select{width:100%}
-.check{flex:1}
-.info{font-size:14px;margin-top:18px}
-.palette{gap:4px}
-.swatch{height:54px}
-.role{font-size:12px}
-.hex{font-size:clamp(9px,2.45vw,12px)}
-.footer{align-items:flex-start}
-.status{padding-top:8px;line-height:1.4}
-}
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>色票撈撈所｜Jellyfish Lab</title>
+    <link rel="stylesheet" href="../CSS/common.css">
+    <link rel="stylesheet" href="../CSS/palette.css">
 </head>
-<body>
-<main class="app">
-<a class="back-btn" href="../index.html">← 返回研究所</a>
-<h1>水母色盤研究所</h1>
-<div class="controls">
-<label class="field">風格<select id="style"></select></label>
-<label class="field">配色關係<select id="scheme"></select></label>
-<label class="check"><input id="fullyRandom" type="checkbox">完全隨機</label>
-<button class="primary" id="generate">抽色盤</button>
-</div>
-<div class="info" id="info"></div>
-<div class="palette" id="palette"></div>
-<div class="footer">
-<div class="status" id="status" role="status" aria-live="polite">點擊色票或 HEX 可複製色碼</div>
-<button id="copyAll">複製整組 HEX</button>
-</div>
-</main>
-<script src="./palette.js"></script>
-<script src="./app.js"></script>
+
+<body data-page="palette">
+    <main class="app">
+        <h1>🎨 色票撈撈所</h1>
+
+        <div class="controls">
+            <label class="field">
+                風格
+                <select id="style"></select>
+            </label>
+
+            <label class="field">
+                配色關係
+                <select id="scheme"></select>
+            </label>
+
+            <label class="check">
+                <input id="fullyRandom" type="checkbox">
+                完全隨機
+            </label>
+
+            <button class="primary" id="generate" type="button">
+                抽色盤
+            </button>
+        </div>
+
+        <div class="info" id="info"></div>
+        <div class="palette" id="palette"></div>
+
+        <div class="footer">
+            <div class="status" id="status" role="status" aria-live="polite">
+                點擊色票或 HEX 可複製色碼
+            </div>
+            <button id="copyAll" type="button">複製整組 HEX</button>
+        </div>
+    </main>
+
+    <script src="../Shared/palette-engine.js"></script>
+    <script src="./app.js"></script>
+    <script src="../Shared/layout.js"></script>
 </body>
+
 </html>
